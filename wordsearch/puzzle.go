@@ -14,6 +14,7 @@ var (
 	EmptyArr         = make([]rune, 1, 1)
 	Empty            = EmptyArr[0]
 	ErrMaxIterations = errors.New("Exceeded 1000 iterations")
+	ErrWordTooLong   = errors.New("Word length exceeds width and height")
 )
 
 type LetterPosition struct {
@@ -89,6 +90,10 @@ func (p *Puzzle) InitializeAndFill() (err error) {
 	for _, word := range p.Words {
 		// We need to pick a direction, find valid range, and roll a spot.
 		// TODO: Allow words to cross?
+
+		if len(word) > p.Width && len(word) > p.Height {
+			return ErrWordTooLong
+		}
 
 		word = strings.ToUpper(word)
 		success := false
